@@ -71,11 +71,24 @@ gallery.addEventListener("click", event => {
     event.preventDefault();
     const selectedImage = event.target.dataset.source;
     console.log(selectedImage);
-    const instance = basicLightbox.create(`
-    <div class="modal">
-      <img src="${selectedImage}" width="1112" height="640">
-    </div>`);
-    instance.show();
+    if (selectedImage) {
+        const instance = basicLightbox.create(`
+        <div class="modal">
+          <img src="${selectedImage}" width="1112" height="640">
+        </div>`, {
+	closable: false
+});
+        instance.show();
+        const visible = basicLightbox.visible();
+        if (visible) {
+            document.addEventListener("keydown", event => {
+                if (event.code === "Escape") {
+                    instance.close();
+                }
+            });
+        };
+    };
+    
 });
 
 
