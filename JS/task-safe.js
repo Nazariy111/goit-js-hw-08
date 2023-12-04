@@ -2,8 +2,6 @@ const body = document.querySelector("body");
 const listMarkup = '<ul class="gallery"></ul>';
 body.insertAdjacentHTML("afterbegin", listMarkup);
 
-
-
 const images = [
     {
     preview: 'https://cdn.pixabay.com/photo/2019/05/14/16/43/rchids-4202820__480.jpg',
@@ -79,37 +77,29 @@ gallery.addEventListener("click", event => {
     if (selectedImage) {
         const instance = basicLightbox.create(`
         <div class="modal">
-            <img src="${selectedImage}" width="1112" height="640">
+        <img src="${selectedImage}" width="1112" height="640">
         </div>`,
             {
-	closable: false
+                closable: false
             },
             {
-                onClose: (instance) => {
-                    document.removeEventListener("keydown", isEscapePressed);
-            }});
-        
-        instance.show();
+                onShow: () => { document.addEventListener("keydown", escapeBtn) }
+            },
+            {
+                onClose: () => { document.removeEventListener("keydown", escapeBtn) }
+            }
+        );
 
-        const modal = document.querySelector(".modal");
-        
-
-        function isEscapePressed({ code }) {
-            if (code === "Escape") {
-                console.log("yes")
+        const escapeBtn = (event) => {
+            if (event.code === "Escape") {
                 instance.close();
-            } else { console.log("no") };
+                console.log("close");
+            };
         };
-        
-        document.addEventListener("keydown", isEscapePressed);
-
-        const isVisible = instance.visible();
-        
-        if (!isVisible) {document.removeEventListener("keydown", isEscapePressed)};
+        instance.show();
+        document.addEventListener("keydown", escapeBtn);
     };
 });
-    
-
 
 
 
