@@ -2,8 +2,6 @@ const body = document.querySelector("body");
 const listMarkup = '<ul class="gallery"></ul>';
 body.insertAdjacentHTML("afterbegin", listMarkup);
 
-
-
 const images = [
     {
     preview: 'https://cdn.pixabay.com/photo/2019/05/14/16/43/rchids-4202820__480.jpg',
@@ -54,7 +52,6 @@ const images = [
 
 const gallery = document.querySelector(".gallery");
 
-
 const galleryMarkup = images
     .map((image) => `
     <li class="gallery-item">
@@ -77,38 +74,28 @@ gallery.addEventListener("click", event => {
     console.log(selectedImage);
 
     if (selectedImage) {
-        const instance = basicLightbox.create(`
+        const modal = basicLightbox.create(`
         <div class="modal">
             <img src="${selectedImage}" width="1112" height="640">
         </div>`,
             {
-	closable: false
-            },
-            {
-                onClose: (instance) => {
-                    document.removeEventListener("keydown", isEscapePressed);
-            }});
+                closable: false,
+                onShow: (modal) => document.addEventListener("keydown", isEscapePressed),
+                onClose: (modal) => document.removeEventListener("keydown", isEscapePressed)
+            }
+        );
         
-        instance.show();
-
-        const modal = document.querySelector(".modal");
-        
+        modal.show();
 
         function isEscapePressed({ code }) {
             if (code === "Escape") {
-                console.log("yes")
-                instance.close();
-            } else { console.log("no") };
+                modal.close();
+            };
         };
-        
-        document.addEventListener("keydown", isEscapePressed);
-
-        const isVisible = instance.visible();
-        
-        if (!isVisible) {document.removeEventListener("keydown", isEscapePressed)};
     };
 });
-    
+
+
 
 
 
