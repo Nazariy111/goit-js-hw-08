@@ -1,5 +1,3 @@
-import images from "./images.js";
-
 const body = document.querySelector("body");
 const listMarkup = '<ul class="gallery"></ul>';
 body.insertAdjacentHTML("afterbegin", listMarkup);
